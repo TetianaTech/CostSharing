@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
-import { AuthGuard } from './guards/auth.guard';
 import { ConfigModule } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
-import { APP_GUARD } from '@nestjs/core';
 import * as Joi from 'joi';
 import { NODE_ENV } from './constants/nodeEnv.contsants';
 
@@ -21,14 +18,8 @@ import { NODE_ENV } from './constants/nodeEnv.contsants';
         JWT_SECRET: Joi.string().required(),
       }),
     }),
-    JwtModule.register({
-      global: true,
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '60s' },
-    }),
     AuthModule,
     UsersModule,
   ],
-  providers: [{ provide: APP_GUARD, useClass: AuthGuard }],
 })
 export class AppModule {}
