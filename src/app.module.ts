@@ -4,6 +4,7 @@ import { UsersModule } from './modules/users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { NODE_ENV } from './constants/nodeEnv.contsants';
+import { RefreshTokensModule } from './modules/refreshTokens/refresh-tokens.module';
 
 @Module({
   imports: [
@@ -15,11 +16,15 @@ import { NODE_ENV } from './constants/nodeEnv.contsants';
           .valid(NODE_ENV.DEVELOPMENT, NODE_ENV.PRODUCTION)
           .default(NODE_ENV.DEVELOPMENT),
         DATABASE_URL: Joi.string().required(),
-        JWT_SECRET: Joi.string().required(),
+        ACCESS_TOKEN_SECRET: Joi.string().required(),
+        REFRESH_TOKEN_SECRET: Joi.string().required(),
+        ACCESS_TOKEN_EXPIRATION_TIME: Joi.number().default(3600),
+        REFRESH_TOKEN_EXPIRATION_TIME: Joi.number().default(604800),
       }),
     }),
     AuthModule,
     UsersModule,
+    RefreshTokensModule,
   ],
 })
 export class AppModule {}
